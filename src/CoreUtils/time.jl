@@ -153,7 +153,7 @@ mktime(t::Array{T,1}) where T<:Integer =(y2μs(t[1]) +
 
 Convert times `s` and `t` to strings and sorts s.t. d0 < d1.
 
-`s` and `t` can be real numbers, DateTime objects, or ASCII strings. 
+`s` and `t` can be real numbers, DateTime objects, or ASCII strings.
 Expected string format is "yyyy-mm-ddTHH:MM:SS.nnn", e.g. 2016-03-23T11:17:00.333.
 
 See also: `TimeSpec`

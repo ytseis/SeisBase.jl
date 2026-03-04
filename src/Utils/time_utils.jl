@@ -1,3 +1,5 @@
+export t_axis
+
 #=
 Purpose: time utilities that depend on custom Types go here
 
@@ -26,4 +28,41 @@ function check_for_gap!(S::GphysData, i::Integer, ts_new::Int64, nx::Integer, v:
     S.t[i] = T1
   end
   return nothing
+end
+
+# Change by ytseis
+"""
+    t_axis(n_samples::Int, fs::Float64, t0_micros::Int64, mode::Symbol)
+
+Helper function for internal calculations.
+"""
+function _generate_time_axis(n_samples::Int, fs::Float64, t0_micros::Int64, mode::Symbol)
+    if mode == :relative
+        # Elapsed time (seconds) starting from 0 seconds
+        return collect(0:n_samples-1) ./ fs
+    end
+
+    # Absolute time reference (seconds)
+    t_start_sec = t0_micros * 1e-6
+    t_unix = t_start_sec .+ (collect(0:n_samples-1) ./ fs)
+
+    if mode == :unix
+        # Seconds from Unix epoch
+        return t_unix
+    elseif mode == :absolute
+        # Human-readable DateTime type
+        return u2d.(t_unix)
+    else
+        throw(ArgumentError("mode must be :absolute, :relative, or :unix"))
+    end
+end
+
+"""
+    t_axis(C::GphysChannel; mode=:absolute)
+
+Retrieves the time axis for single-channel data (e.g., SeisChannel).
+"""
+function t_axis(C::GphysChannel; mode::Symbol=:absolute)
+    t_start_micros = starttime(C.t, C.fs)
+    return _generate_time_axis(C.t[2,1], C.fs, t_start_micros, mode)
 end
