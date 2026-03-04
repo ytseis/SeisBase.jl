@@ -66,7 +66,7 @@ Generic instrument response with two fields:
 mutable struct GenResp <: InstrumentResponse
   desc::String
   resp::Array{Complex{Float64},2}
-  function GenResp(S::String, X::Array{Complex{Float64},2}) where {T<:Complex}
+  function GenResp(S::String, X::Array{Complex{Float64},2}) # where {T<:Complex}
     return new(S, X)
   end
 end
