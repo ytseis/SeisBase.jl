@@ -298,6 +298,7 @@ function sync!(C::SeisChannel;
                 v::Integer=KW.v )
   S = SeisData(C)
   sync!(S, pad=pad, s=s, t=t, v=v)
+  C.t = S.t[1]
   return nothing
 end
 
