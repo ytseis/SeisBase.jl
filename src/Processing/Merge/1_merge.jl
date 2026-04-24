@@ -191,31 +191,3 @@ function merge!(C::T1, D::T2) where {T1<:GphysChannel, T2<:GphysChannel}
   return nothing
 end
 
-# modified by ytseis
-"""
-    merge_channels(chans::SeisData) -> SeisData
-
-Merge operation periods of the same channels in `chans`.
-"""
-function merge_channels(chans::SeisData)
-    chans_merged = SeisData()
-
-    for id in unique(chans.id)
-        idx = findall(chans.id .== id)
-        chans_id = chans[idx]
-        ops = [get_operation_period(chans_id[i]) for i in 1:chans_id.n]
-        TSs = [op[1] for op in ops]
-        TTs = [op[2] for op in ops]
-        sp = sortperm(TSs)
-        chan_id = chans_id[sp[1]]
-
-        TSmin = minimum(TSs)
-        TTmax = maximum(TTs)
-        chan_id.misc["startDate"] = round(Int64, d2u(TSmin)*SeisBase.sμ)
-        chan_id.misc["endDate"] = round(Int64, d2u(TTmax)*SeisBase.sμ)
-
-        push!(chans_merged, chan_id)
-    end
-
-    return chans_merged
-end
