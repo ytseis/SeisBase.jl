@@ -11,7 +11,7 @@ Read QuakeXML (qml) from ASDF file(s) matching file string pattern `fpat`. Retur
 * `R`, Array{SeisSrc,1}
 
 """
-function asdf_rqml(io::HDF5File)
+function asdf_rqml(io::HDF5.File)
   EvCat = Array{SeisHdr,1}()
   EvSrc = Array{SeisSrc,1}()
 
@@ -39,7 +39,7 @@ function asdf_rqml(fpat::String)
   return(EvCat, EvSrc)
 end
 
-function asdf_wqml!(hdf::HDF5File, HDR::Array{SeisHdr,1}, SRC::Array{SeisSrc,1},
+function asdf_wqml!(hdf::HDF5.File, HDR::Array{SeisHdr,1}, SRC::Array{SeisSrc,1},
   ovr::Bool, v::Integer)
   hq = Int8[]
   io = IOBuffer()
@@ -114,7 +114,7 @@ As above, for the `:hdr` and `:source` fields of `evt`.
     To write data from `R ∈ SSRC`, it must be true that `R.eid == H.id` for some `H ∈ SHDR`.
 
 See also: `write_qml`
-""" 
+"""
 function asdf_wqml(hdf_out::String, HDR::Array{SeisHdr,1}, SRC::Array{SeisSrc,1};
   ovr::Bool=false,
   v::Integer=0)
